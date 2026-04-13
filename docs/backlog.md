@@ -1,25 +1,19 @@
-# Expense Manager
+## 📝 Gestão de Escopo (Backlog)
 
-## Visão do Projeto
-Sistema web para gerenciamento de despesas pessoais que registra despesas,categoriza gastos, exibe dashboards e gera insights automáticos.
+O desenvolvimento foi guiado por um backlog priorizado para garantir a entrega das funcionalidades core antes dos refinamentos estéticos.
 
-## Objetivo
-Melhorar controle financeiro de forma simplificada, para usuarios que tem dificuldade de controlar gastos, visualizar onde o dinheiro vai e tomar decisões financeiras.
+### Prioridade 1 (Essencial)
+- [x] Configuração do ambiente FastAPI e conexão com Banco de Dados.
+- [x] CRUD completo de transações (Backend e Frontend).
+- [x] Renderização de totalizadores de saldo dinâmicos.
 
-## Arquitetura
-[Ver arquitetura](docs/arquitetura.md)
+### Prioridade 2 (Diferencial Técnico)
+- [x] Integração com Chart.js para visualização de dados.
+- [x] Lógica de filtragem por período sem reload de página.
+- [x] Cálculo automático de variação percentual mensal.
 
-## Requisitos
-[Ver requisitos](docs/requisitos.md)
+### Prioridade 3 (Futuro/Escalabilidade)
+- [ ] Implementação de autenticação de usuários (JWT).
+- [ ] Exportação de relatórios em formato CSV/PDF.
+- [ ] Sistema de metas financeiras com barra de progresso.
 
-## Prototipação
-[Ver protótipos](docs/prototipo.md)
-
-## Processos
-[Ver processos](docs/processos.md)
-
-## Como rodar o projeto
-...
-
-## 🔗 API Docs
-http://localhost:8000/docs
