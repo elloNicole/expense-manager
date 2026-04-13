@@ -30,18 +30,18 @@ O design foi estruturado seguindo princípios de **Dashboarding**, onde a hierar
 
 ---
 
-## 📊 Requisitos e Processos
+### 📋 Requisitos e Diretrizes Técnicas
 
-### Requisitos Funcionais (RF)
-- **RF-01:** O sistema deve realizar o CRUD (Create, Read, Update, Delete) de transações financeiras.
-- **RF-02:** O dashboard deve processar o saldo geral acumulado e os totais de entradas/saídas baseados no período selecionado.
-- **RF-03:** O sistema deve plotar um gráfico de evolução diária que respeite o intervalo de datas definido pelo usuário.
-- **RF-04:** O sistema deve calcular a variação percentual de gastos comparando o período atual com o anterior.
+#### Requisitos Funcionais (RF)
+* **RF-01 (Persistência Transacional):** O sistema deve gerenciar o ciclo de vida completo (CRUD) de ativos financeiros, garantindo a integridade dos registros de entrada e saída.
+* **RF-02 (Agregação de Dados):** O motor do dashboard deve processar o saldo líquido acumulado e os volumes de aporte/escoamento em conformidade com o subset de dados selecionado.
+* **RF-03 (Telemetria Temporal):** Plotagem dinâmica de séries temporais (Time Series) para evolução diária, sincronizada estritamente com o intervalo cronológico definido pelo usuário.
+* **RF-04 (Análise MoM):** Algoritmo de inteligência financeira para cálculo de variação percentual comparativa entre o período corrente e o histórico anterior (Month over Month).
 
-### Requisitos Não Funcionais (RNF)
-- **RNF-01:** Persistência de dados e integridade referencial via banco de dados.
-- **RNF-02:** Interface Single Page (SPI) onde a filtragem não exige novos reloads de página.
-- **RNF-03:** Tratamento de objetos `Date` para evitar inconsistências de fuso horário no armazenamento.
+#### Requisitos Não Funcionais (RNF)
+* **RNF-01 (Integridade Referencial):** Persistência de dados robusta e garantia de relacionamentos via ORM (SQLAlchemy) em banco de dados relacional.
+* **RNF-02 (Arquitetura SPA):** Interface de página única (Single Page Application) com manipulação de estado local, eliminando a necessidade de reloads para filtragem de dados.
+* **RNF-03 (Normalização Temporal):** Tratamento rigoroso de objetos `Date` e sincronização de fuso horário (UTC/ISO 8601) para mitigar inconsistências no armazenamento e exibição.
 
 ---
 
