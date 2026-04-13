@@ -20,7 +20,7 @@ Aplicação full-stack para gerenciamento de fluxo de caixa pessoal, focada em a
 
 O design foi estruturado seguindo princípios de **Dashboarding**, onde a hierarquia visual prioriza a tomada de decisão rápida.
 
-[![Interface do Projeto](/backend/docs/image.png)]((https://www.figma.com/make/ggMZi8n2mQFcoKLCJenEsW/Untitled?fullscreen=1&t=09N1zCfbflbMWP28-1))
+[![Interface do Projeto](/docs/image.png)]((https://www.figma.com/make/ggMZi8n2mQFcoKLCJenEsW/Untitled?fullscreen=1&t=09N1zCfbflbMWP28-1))
 
 > 💡 **Dica:** Clique na imagem acima para acessar o protótipo interativo no Figma.
 
