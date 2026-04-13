@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Manager | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .active-tab { border-bottom: 3px solid #2563eb; color: #2563eb; font-weight: 600; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans">
+
+    <nav class="bg-white border-b sticky top-0 z-50 p-4 flex justify-between items-center px-10">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+            <span class="font-bold text-xl tracking-tight">Controle de Despesas</span>
+        </div>
+        <div class="flex gap-8">
+            <button onclick="showSection('dashboard')" id="btn-dashboard" class="py-2 px-1 transition-all active-tab">Dashboard</button>
+            <button onclick="showSection('lista')" id="btn-lista" class="py-2 px-1 transition-all">Transações</button>
+            <button onclick="showSection('cadastro')" id="btn-cadastro" class="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition">
+                <i class="fas fa-plus mr-2"></i>Nova Despesa
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto mt-8 p-4">
+
+        <section id="sec-dashboard" class="px-4 md:px-10 pt-2 pb-10 flex flex-col">
+            <div class="mb-6"> <h1 class="text-3xl font-bold text-slate-900 mt-0">Dashboard</h1>
+                <p class="text-slate-500">Visão geral das suas despesas</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 mb-8 flex flex-wrap items-center gap-4">
+                <div class="flex flex-col">
+                    <label class="text-xs font-bold text-slate-400 mb-1">DATA INÍCIO</label>
+                    <input type="date" id="filtro-inicio" class="border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-xs font-bold text-slate-400 mb-1">DATA FIM</label>
+                    <input type="date" id="filtro-fim" class="border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                </div>
+                <button onclick="aplicarFiltro()" class="mt-5 bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition">Filtrar</button>
+                <button onclick="limparFiltro()" class="mt-5 bg-slate-100 text-slate-600 px-6 py-2 rounded-lg font-bold hover:bg-slate-200 transition">Limpar</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4">
+                    <div class="bg-blue-50 text-blue-600 p-3 rounded-xl"><i class="fas fa-wallet fa-lg"></i></div>
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Total Geral (Saldo)</p>
+                        <h3 id="dash-saldo" class="text-3xl font-bold text-slate-900 mt-1">R$ 0,00</h3>
+                        <p id="dash-qtd-transacoes" class="text-xs text-slate-400 mt-1">0 transações</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4">
+                    <div class="bg-green-50 text-green-600 p-3 rounded-xl"><i class="fas fa-arrow-up fa-lg"></i></div>
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Entradas</p>
+                        <h3 id="dash-entradas" class="text-3xl font-bold text-green-600 mt-1">R$ 0,00</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start gap-4">
+                    <div class="bg-red-50 text-red-600 p-3 rounded-xl"><i class="fas fa-arrow-down fa-lg"></i></div>
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Saídas</p>
+                        <h3 id="dash-saidas" class="text-3xl font-bold text-red-600 mt-1">R$ 0,00</h3>
+                        <p id="dash-variacao-saida" class="text-xs text-slate-400 mt-1"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold text-slate-900 mb-6">Evolução</h4>
+                    <div class="h-80">
+                        <canvas id="chartEvolucao"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h4 class="font-bold text-slate-900 mb-6">Gastos por Categoria</h4>
+                    <div class="h-80">
+                        <canvas id="chartCategorias"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="sec-lista" class="hidden">
+            <div class="bg-white rounded-3xl shadow-sm border overflow-hidden">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b">
+                        <tr>
+                            <th class="p-5 text-slate-500 font-semibold uppercase text-xs">Data</th>
+                            <th class="p-5 text-slate-500 font-semibold uppercase text-xs">Descrição</th>
+                            <th class="p-5 text-slate-500 font-semibold uppercase text-xs">Categoria</th>
+                            <th class="p-5 text-slate-500 font-semibold uppercase text-xs text-right">Valor</th>
+                            <th class="p-5 text-slate-500 font-semibold uppercase text-xs text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-corpo"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="sec-cadastro" class="hidden flex justify-center">
+            <div class="bg-white p-10 rounded-3xl shadow-xl border w-full max-w-xl">
+                <h2 class="text-2xl font-bold mb-2">Adicionar Transação</h2>
+                <p class="text-slate-500 mb-8">Preencha os dados abaixo para atualizar seu balanço.</p>
+                
+                <form id="form-despesa" class="space-y-5">
+                    <input type="hidden" id="edit-id">
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" onclick="setTipo('entrada')" id="btn-tipo-entrada" class="p-4 border-2 rounded-2xl font-bold transition border-slate-200">↑ Entrada</button>
+                        <button type="button" onclick="setTipo('saida')" id="btn-tipo-saida" class="p-4 border-2 rounded-2xl font-bold transition border-blue-600 text-blue-600 bg-blue-50">↓ Saída</button>
+                    </div>
+                    <input type="hidden" id="tipo" value="saida">
+
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Descrição</label>
+                        <input type="text" id="descricao" placeholder="Ex: Aluguel, Salário..." class="w-full bg-slate-50 border-0 rounded-xl p-4 focus:ring-2 focus:ring-blue-500 outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold mb-2">Valor (R$)</label>
+                            <input type="number" step="0.01" id="valor" class="w-full bg-slate-50 border-0 rounded-xl p-4 focus:ring-2 focus:ring-blue-500 outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2">Data</label>
+                            <input type="date" id="data" class="w-full bg-slate-50 border-0 rounded-xl p-4 focus:ring-2 focus:ring-blue-500 outline-none" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Categoria</label>
+                        <select id="categoria" class="w-full bg-slate-50 border-0 rounded-xl p-4 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="Alimentação">Alimentação</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Trabalho">Trabalho</option>
+                            <option value="Lazer">Lazer</option>
+                            <option value="Saúde">Saúde</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-4 pt-4">
+                        <button type="submit" class="flex-1 bg-blue-600 text-white font-bold py-4 rounded-2xl hover:bg-blue-700 transition shadow-lg shadow-blue-200">Confirmar</button>
+                        <button type="button" onclick="showSection('dashboard')" class="flex-1 bg-slate-100 text-slate-600 font-bold py-4 rounded-2xl hover:bg-slate-200 transition">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

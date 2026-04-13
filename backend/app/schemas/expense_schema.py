@@ -1,17 +1,15 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 
 class ExpenseCreate(BaseModel):
-    valor: float = Field(gt=0)
+    valor: float = Field(gt=0, description="O valor deve ser maior que zero")
     categoria: str
     data: str
-    descricao: str | None = None
+    tipo: str = Field(pattern="^(entrada|saida)$")
+    descricao: Optional[str] = None
 
-class ExpenseResponse(BaseModel):
+class ExpenseResponse(ExpenseCreate):
     id: int
-    valor: float
-    categoria: str
-    data: str
-    descricao: str | None
-
+    
     class Config:
         from_attributes = True

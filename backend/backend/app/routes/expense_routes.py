@@ -32,7 +32,3 @@ def dashboard(db: Session = Depends(get_db)):
 @router.get("/insights")
 def insights(db: Session = Depends(get_db)):
     return expense_service.get_insights(db)
-
-@router.put("/despesas/{id}")
-def update(id: int, expense: ExpenseCreate, db: Session = Depends(get_db)):
-    return expense_service.update_expense(db, id, expense)

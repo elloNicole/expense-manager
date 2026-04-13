@@ -8,7 +8,6 @@ class Expense(Base):
     id = Column(Integer, primary_key=True, index=True)
     valor = Column(Float, nullable=False)
     categoria = Column(String, nullable=False)
-    data = Column(String, nullable=False) # Armazenado como ISO string (YYYY-MM-DD)
+    data = Column(String, nullable=False)
     descricao = Column(String, nullable=True)
-    tipo = Column(String, default="saida") # "entrada" ou "saida"
     criado_em = Column(DateTime, default=datetime.utcnow)
